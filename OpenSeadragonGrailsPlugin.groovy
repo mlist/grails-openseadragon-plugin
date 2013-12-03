@@ -8,12 +8,11 @@ class OpenSeadragonGrailsPlugin {
         "grails-app/views/error.gsp"
     ]
 
-    // TODO Fill in these fields
     def title = "Open Seadragon Plugin" // Headline display name of the plugin
     def author = "Markus List"
     def authorEmail = "itisalist@gmail.com"
     def description = '''\
-This plugin nicely wraps the openseadragon javascript library. openseadragon is a pure javascript library that allows you
+This plugin wraps the openseadragon javascript library. openseadragon is a pure javascript library that allows you
 to display, pan, and zoom large images. To this end, images need to be split into tiles. openseadragon supports a number of
 formats. In order to include an all java solution here, I produce tiles for the microsoft deep image format using modified code
 from https://code.google.com/p/deepjzoom/. Have a look at github for a more detailled description.
