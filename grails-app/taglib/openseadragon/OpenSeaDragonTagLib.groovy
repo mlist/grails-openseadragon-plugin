@@ -1,7 +1,5 @@
 package openseadragon
 
-import org.apache.commons.io.FilenameUtils
-
 class OpenSeaDragonTagLib {
 
     def grailsApplication
@@ -22,7 +20,6 @@ class OpenSeaDragonTagLib {
             out << "target required"
             return
         }
-
 
         //check if file is being processed right now
         if(imageProcessingService.isBeingProcessed(filePath)){
@@ -77,4 +74,3 @@ class OpenSeaDragonTagLib {
         """
     }
 }
-

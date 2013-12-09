@@ -1,35 +1,29 @@
 package org.nanocan.io
 
-import org.apache.commons.io.FilenameUtils
-
 class ImgController {
-    def grailsApplication
     def springSecurityService
 
-    def getTiles(){
+    def getTiles(String imageFile, String imageFolder, String imageLevel) {
 
         if(!springSecurityService?.isLoggedIn()){
-            response.status =  403
+            response.status = 403
             return
         }
 
-        def imageZoomFolder = "/upload/tiles"//grailsApplication.config.imagezoom.folder
+        String imageZoomFolder = grailsApplication.config.imagezoom.folder ?: "/upload/tiles"
 
-        def fileName = params.imageFile
-        def pathToTiles = imageZoomFolder.toString() + "/" + params.imageFolder + "/" + params.imageLevel + "/" + fileName
+        String pathToTiles = "$imageZoomFolder/$imageFolder/$imageLevel/$imageFile"
 
-        log.info "Trying to read tile for ${fileName} from ${pathToTiles}"
+        log.info "Trying to read tile for $imageFile from $pathToTiles"
 
         File imgFile = new File(pathToTiles)
 
-        if (imgFile.exists()) {
-            response.contentType="image/jpg"
-            response.outputStream << imgFile.newInputStream()
-        }
-
-        else {
+        if (!imgFile.exists()) {
             response.status = 404
+            return
         }
 
+        response.contentType = "image/jpg"
+        response.outputStream << imgFile.newInputStream()
     }
 }
