@@ -60,7 +60,6 @@ import java.awt.RenderingHints;
 import javax.imageio.ImageIO;
 import java.util.Vector;
 import java.util.Iterator;
-
 /**
  *
  * @author Glenn Lawrence
@@ -196,11 +195,20 @@ public class DeepZoomConverter {
         String fileName = inFile.getName();
         String nameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
         String pathWithoutExtension = outputDir + File.separator + nameWithoutExtension;
+        String extension = fileName.substring(fileName.lastIndexOf('.')+1, fileName.length());
 
         BufferedImage image = loadImage(inFile);
 
         int originalWidth = image.getWidth();
         int originalHeight = image.getHeight();
+
+        //tiff files can be converted with jai library if color model is corrected
+        if(extension.toLowerCase().equals("tif") || extension.toLowerCase().equals("tiff"))
+        {
+            BufferedImage convertedImage = new BufferedImage(originalWidth, originalHeight, BufferedImage.TYPE_INT_RGB);
+            convertedImage.createGraphics().drawRenderedImage(image, null);
+            image = convertedImage;
+        }
 
         double maxDim = Math.max(originalWidth, originalHeight);
 
@@ -312,7 +320,9 @@ public class DeepZoomConverter {
     private static BufferedImage loadImage(File file) throws IOException {
         BufferedImage result = null;
         try {
+            ImageIO.scanForPlugins();
             result = ImageIO.read(file);
+
         } catch (Exception e) {
             throw new IOException("Cannot read image file: " + file);
         }

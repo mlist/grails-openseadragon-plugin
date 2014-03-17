@@ -48,6 +48,8 @@ class ImageProcessingService {
         def tileOverlap = grailsApplication.config.openseadragon.tileOverlap?:1
         def tileSize = grailsApplication.config.openseadragon.tileSize?:256
 
+        //check if it's a tiff file
+
         //do the conversion
         log.info "converting ${inputFile} with overlap ${tileOverlap} and tile size ${tileSize}"
         try{
