@@ -10,24 +10,21 @@ class ImageProcessingService {
         grailsApplication.config.openseadragon.tilesFolder?:"web-apps/"
     }
 
-    def getDescriptorFilePath(def filePath){
+    String getDescriptorFilePath(String filePath){
         def tilesFolder = grailsApplication.config.openseadragon.tilesFolder?:"web-apps/"
         def modifiedFilePath = getModifiedFilePath(filePath)
-        def descriptorFilePath = tilesFolder+ "/" + modifiedFilePath  + ".xml"
-
-        return(descriptorFilePath)
+        "$tilesFolder/${modifiedFilePath}.xml"
     }
 
-    private String getModifiedFilePath(def filePath)
-    {
+    private String getModifiedFilePath(String filePath) {
         FilenameUtils.removeExtension(FilenameUtils.getName(filePath))
     }
 
-    private File getLockFile(def inputFile){
-        return(new File(getOutputFolder() + "/" + inputFile + ".lock"))
+    private File getLockFile(inputFile){
+        return new File(getOutputFolder() + "/" + inputFile + ".lock")
     }
 
-    def convertToDeepZoom(def inputFile) {
+    def convertToDeepZoom(inputFile) {
 
         //start by creating a lock file to avoid that this process is being restarted several times
         def lockFile = getLockFile()
@@ -64,16 +61,14 @@ class ImageProcessingService {
         //delete lock file
         log.info "deleting lock file for ${inputFile}"
         lockFile.delete()
-
-        return
     }
 
-    def isBeingProcessed(def inputFile)
+    boolean isBeingProcessed(inputFile)
     {
         return(getLockFile(inputFile).exists())
     }
 
-    def isProcessed(def filePath, boolean ifNotCreate)
+    boolean isProcessed(String filePath, boolean ifNotCreate)
     {
         def descriptorFilePath = getDescriptorFilePath(filePath)
 
