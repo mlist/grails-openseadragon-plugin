@@ -2,6 +2,7 @@
 .settings
 *.log
 /*.zip
+/*.sha1
 /plugin.xml
 /cobertura.ser
 .DS_Store
@@ -10,3 +11,4 @@
 /web-app/WEB-INF
 /.link_to_grails_plugins/
 /target-eclipse/
+/web-app

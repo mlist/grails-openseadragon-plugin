@@ -6,3 +6,5 @@ log4j = {
 }
 
 grails.resources.adhoc.patterns = ["/images/*", "*.css", "*.js", "*.map"]
+grails.views.default.codec="none" // none, html, base64
+grails.views.gsp.encoding="UTF-8"
