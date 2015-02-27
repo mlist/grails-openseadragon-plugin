@@ -2,7 +2,6 @@ package openseadragon
 
 class OpenSeaDragonTagLib {
 
-    def grailsApplication
     def imageProcessingService
 
     def openSeaDragon = { attrs, body ->
@@ -24,6 +23,7 @@ class OpenSeaDragonTagLib {
         //check if file is being processed right now
         if(imageProcessingService.isBeingProcessed(filePath)){
             out << "<div class='message'>Image file is still being processed. It will be...wait for it...</div>"
+            return
         } //check if file has been processed
         else if(!imageProcessingService.isProcessed(filePath, true)){
             out << "<div class='message'>Image file is being processed in the background. Refresh this page in a few seconds.</div>"
@@ -31,8 +31,13 @@ class OpenSeaDragonTagLib {
         }
 
         //extract XML description of deep image
-        def deepImageDescriptor = new XmlParser().parse(imageProcessingService.getDescriptorFilePath(filePath))
-
+        def deepImageDescriptor
+        try {
+            deepImageDescriptor = new XmlParser().parse(imageProcessingService.getDescriptorFilePath(filePath))
+        }catch(FileNotFoundException e){
+            out << "Descriptor file not found"
+            return
+        }
         def tileSourceUrl = g.createLink(controller: "img", action:"getTiles") + "/" + imageProcessingService.getModifiedFilePath(filePath) + "/"
         def imageWidth = deepImageDescriptor.Size.@Width.first()
         def imageHeight = deepImageDescriptor.Size.@Height.first()

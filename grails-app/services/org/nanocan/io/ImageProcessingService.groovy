@@ -7,13 +7,13 @@ class ImageProcessingService {
     def grailsApplication
 
     def getOutputFolder(){
-        grailsApplication.config.openseadragon.tilesFolder?:"web-apps/"
+        grailsApplication?.config?.openseadragon?.tilesFolder?:"web-apps/"
     }
 
     String getDescriptorFilePath(String filePath){
-        def tilesFolder = grailsApplication.config.openseadragon.tilesFolder?:"web-apps/"
+        def tilesFolder = getOutputFolder()
         def modifiedFilePath = getModifiedFilePath(filePath)
-        "$tilesFolder/${modifiedFilePath}.xml"
+        "${tilesFolder}/${modifiedFilePath}.xml"
     }
 
     private String getModifiedFilePath(String filePath) {
@@ -21,13 +21,13 @@ class ImageProcessingService {
     }
 
     private File getLockFile(inputFile){
-        return new File(getOutputFolder() + "/" + inputFile + ".lock")
+        return new File(getOutputFolder() + "/" + getModifiedFilePath(inputFile) + ".lock")
     }
 
     def convertToDeepZoom(inputFile) {
 
         //start by creating a lock file to avoid that this process is being restarted several times
-        def lockFile = getLockFile()
+        def lockFile = getLockFile(inputFile)
 
         //check if lock file exists
         if(lockFile.exists())
@@ -42,10 +42,8 @@ class ImageProcessingService {
         output.close()
 
         //get conversion properties
-        def tileOverlap = grailsApplication.config.openseadragon.tileOverlap?:1
-        def tileSize = grailsApplication.config.openseadragon.tileSize?:256
-
-        //check if it's a tiff file
+        def tileOverlap = grailsApplication?.config?.openseadragon?.tileOverlap?:1
+        def tileSize = grailsApplication?.config?.openseadragon?.tileSize?:256
 
         //do the conversion
         log.info "converting ${inputFile} with overlap ${tileOverlap} and tile size ${tileSize}"
@@ -55,7 +53,8 @@ class ImageProcessingService {
         {
             log.info "deleting lock file for ${inputFile}"
             lockFile.delete()
-            throw e
+            log.error e.getMessage()
+            log.error e.getStackTrace()
         }
 
         //delete lock file

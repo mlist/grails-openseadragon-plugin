@@ -11,10 +11,10 @@ grails.project.dependency.resolution = {
         mavenCentral()
         mavenRepo "http://maven.geo-solutions.it"
         mavenRepo "http://download.osgeo.org/webdav/geotools/"
-
+        mavenRepo "http://repo.grails.org/grails/repo/"
     }
     dependencies {
-        compile 'it.geosolutions.imageio-ext:imageio-ext-tiff:1.1.7'
+        build 'it.geosolutions.imageio-ext:imageio-ext-tiff:1.1.7'
     }
 
     plugins {

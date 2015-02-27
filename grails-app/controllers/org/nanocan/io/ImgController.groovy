@@ -2,6 +2,7 @@ package org.nanocan.io
 
 class ImgController {
     def springSecurityService
+    def grailsApplication
 
     def getTiles(String imageFile, String imageFolder, String imageLevel) {
 
@@ -9,8 +10,7 @@ class ImgController {
             response.status = 403
             return
         }
-
-        String imageZoomFolder = grailsApplication.config.imagezoom.folder ?: "/upload/tiles"
+        String imageZoomFolder = grailsApplication?.config?.openseadragon?.tilesFolder?: "web-apps/"
 
         String pathToTiles = "$imageZoomFolder/$imageFolder/$imageLevel/$imageFile"
 
