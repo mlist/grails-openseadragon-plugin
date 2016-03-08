@@ -1,5 +1,6 @@
 modules = {
     openseadragon{
-        resource url: 'js/openseadragon.min.js'
+        resource id: 'js',
+                 url: [plugin: 'openSeadragon', dir: 'js', file: 'openseadragon.min.js']
     }
 }
